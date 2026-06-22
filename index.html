@@ -21,11 +21,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .page-header h1{font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:6px}
 .page-header p{font-size:14px;color:#666;line-height:1.6}
 .card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1.5rem;margin-bottom:1.25rem}
-.name-section{margin-bottom:1.5rem}
-.name-section label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#888;display:block;margin-bottom:8px}
-.name-input-row{display:flex;gap:10px}
-.name-input-row input{flex:1;padding:9px 13px;border:1px solid #e0e0db;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:#1a1a1a;outline:none;transition:border-color 0.15s}
-.name-input-row input:focus{border-color:#1a1a1a}
+.field-section{margin-bottom:1.5rem}
+.field-section label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#888;display:block;margin-bottom:8px}
+.field-section input,.field-section select{width:100%;padding:9px 13px;border:1px solid #e0e0db;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:#1a1a1a;outline:none;transition:border-color 0.15s;appearance:none}
+.field-section input:focus,.field-section select:focus{border-color:#1a1a1a}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
 .month-block{margin-bottom:2rem}
 .month-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .month-title::after{content:'';flex:1;height:1px;background:#e5e5e0}
@@ -45,6 +45,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .submit-btn:disabled{opacity:0.4;cursor:not-allowed}
 .toast{display:none;margin-top:1rem;padding:11px 16px;background:#e8f7f2;border:1px solid #b2dfd1;border-radius:8px;color:#0f6e56;font-size:13px}
 .toast.error{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+.password-overlay{position:absolute;top:0;left:0;right:0;min-height:400px;display:flex;align-items:center;justify-content:center;background:#f5f4f1;padding:2rem}
+.password-card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:2rem;width:100%;max-width:360px;text-align:center}
+.password-card h2{font-size:16px;font-weight:600;margin-bottom:6px}
+.password-card p{font-size:13px;color:#666;margin-bottom:1.25rem}
+.password-card input{width:100%;padding:9px 13px;border:1px solid #e0e0db;border-radius:8px;font-size:14px;font-family:inherit;text-align:center;letter-spacing:0.1em;outline:none;margin-bottom:10px}
+.password-card input:focus{border-color:#1a1a1a}
+.password-card button{width:100%;padding:10px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
+.password-card button:hover{opacity:0.85}
+.password-error{font-size:12px;color:#991b1b;margin-top:8px;display:none}
+.team-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem}
+.team-tab{padding:6px 12px;border:1px solid #e5e5e0;border-radius:20px;font-size:12px;cursor:pointer;background:#fff;color:#555;font-family:inherit;transition:all 0.15s}
+.team-tab:hover{border-color:#999;color:#1a1a1a}
+.team-tab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
 .pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem;align-items:center}
 .pill{padding:4px 10px;border-radius:20px;font-size:12px;background:#f0efe9;border:1px solid #e5e5e0;color:#555}
 .resp-count{font-size:13px;color:#666;margin-right:4px}
@@ -73,12 +86,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .date-field input:focus{border-color:#1a1a1a}
 .update-dates-btn{margin-top:10px;padding:7px 14px;border:1px solid #e0e0db;border-radius:6px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;font-family:inherit}
 .update-dates-btn:hover{background:#f5f4f1}
+.no-responses{font-size:13px;color:#aaa;padding:1rem 0}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-logo">Lab2Market Launch <span>/ Founder Council</span></div>
+  <div class="topbar-logo">Lab2Market Launch <span>/ Founder Council Meeting</span></div>
   <div class="tabs">
     <button class="tab active" onclick="showPage('founder',this)">Availability Form</button>
     <button class="tab" onclick="showPage('organizer',this)">Organizer View</button>
@@ -92,10 +106,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <p>Select every slot that works for you in October, November, and December. The Founder Council meets once per month for one hour, Monday–Friday between 8am and 6pm.</p>
     </div>
     <div class="card">
-      <div class="name-section">
-        <label>Your name</label>
-        <div class="name-input-row">
+      <div class="field-row">
+        <div class="field-section">
+          <label>Your name</label>
           <input type="text" id="founder-name" placeholder="First and last name" />
+        </div>
+        <div class="field-section">
+          <label>Your team</label>
+          <select id="founder-team">
+            <option value="">Select your team...</option>
+            <option>AY Sensors</option>
+            <option>Cement Dioxide</option>
+            <option>Intellicycle</option>
+            <option>Local Connect</option>
+            <option>OncoNext Therapy</option>
+            <option>RoadAlly</option>
+            <option>ScaleUp</option>
+            <option>Xpsilon</option>
+            <option>Zalvatech</option>
+          </select>
         </div>
       </div>
       <div id="grids-container"></div>
@@ -104,18 +133,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 
-  <div id="organizer" class="page">
-    <div class="page-header">
-      <h1>Organizer view</h1>
-      <p>Live response summary, best slot recommendations, and availability heatmaps for all three months.</p>
+  <div id="organizer" class="page" style="position:relative;min-height:400px">
+    <div id="password-overlay" class="password-overlay">
+      <div class="password-card">
+        <h2>Organizer access</h2>
+        <p>Enter the password to view responses and manage cohort settings.</p>
+        <input type="password" id="password-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPassword()" />
+        <button onclick="checkPassword()">Enter →</button>
+        <div class="password-error" id="password-error">Incorrect password. Please try again.</div>
+      </div>
     </div>
-    <div id="org-content"></div>
+    <div id="org-inner" style="display:none">
+      <div class="page-header">
+        <h1>Organizer view</h1>
+        <p>Filter by team to see each group's availability and best slots independently.</p>
+      </div>
+      <div id="org-content"></div>
+    </div>
   </div>
 </div>
 
 <script>
 const SUPABASE_URL = 'https://xvvqripkovebllvvnyeg.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2dnFyaXBrb3ZlYmxsdnZueWVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNDY0NzQsImV4cCI6MjA5NzcyMjQ3NH0.Ca8s1b821IzvRu5G10bkzrthWzuZzmv4MgZ3jNne7DI';
+const ORG_PASSWORD = 'L2M2026';
+
+const TEAMS = ['AY Sensors','Cement Dioxide','Intellicycle','Local Connect','OncoNext Therapy','RoadAlly','ScaleUp','Xpsilon','Zalvatech'];
 
 const DEFAULT_MONTHS = [
   {label:'October 2026',key:'oct',dates:[{d:'Oct 5',day:'Mon'},{d:'Oct 6',day:'Tue'},{d:'Oct 7',day:'Wed'},{d:'Oct 8',day:'Thu'},{d:'Oct 9',day:'Fri'}]},
@@ -128,6 +171,8 @@ for(let h=8;h<18;h++) HOURS.push({label:h===12?'12pm':h<12?h+'am':(h-12)+'pm',va
 
 let MONTHS = JSON.parse(localStorage.getItem('fc_months')||'null') || DEFAULT_MONTHS;
 let selected = {};
+let orgUnlocked = false;
+let activeTeam = TEAMS[0];
 
 function slotKey(mkey,di,hi){ return `${mkey}_${di}_${hi}`; }
 
@@ -143,7 +188,6 @@ function buildFounderGrids(){
     const grid = document.createElement('div');
     grid.className='grid';
     grid.style.gridTemplateColumns=`54px repeat(${m.dates.length},46px)`;
-
     const corner=document.createElement('div');
     corner.className='cell corner';
     grid.appendChild(corner);
@@ -153,7 +197,6 @@ function buildFounderGrids(){
       lbl.innerHTML=`${date.day}<span>${date.d}</span>`;
       grid.appendChild(lbl);
     });
-
     HOURS.forEach((hr,hi)=>{
       const tl=document.createElement('div');
       tl.className='cell time-lbl';
@@ -169,7 +212,6 @@ function buildFounderGrids(){
         grid.appendChild(cell);
       });
     });
-
     scroll.appendChild(grid);
     block.appendChild(scroll);
     c.appendChild(block);
@@ -183,22 +225,22 @@ function toggleCell(key,cell){
 
 async function submitAvailability(){
   const name=document.getElementById('founder-name').value.trim();
-  if(!name){document.getElementById('founder-name').focus();showToast('Please enter your name first.','error');return;}
+  const team=document.getElementById('founder-team').value;
+  if(!name){document.getElementById('founder-name').focus();showToast('Please enter your name.','error');return;}
+  if(!team){document.getElementById('founder-team').focus();showToast('Please select your team.','error');return;}
   const slots=Object.keys(selected).filter(k=>selected[k]);
   if(!slots.length){showToast('Please select at least one available slot.','error');return;}
 
   const btn=document.getElementById('submit-btn');
-  btn.disabled=true;
-  btn.textContent='Saving...';
+  btn.disabled=true;btn.textContent='Saving...';
 
   try{
-    const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}&select=id`,{
+    const checkRes=await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}&team=eq.${encodeURIComponent(team)}&select=id`,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
     });
-    const existing = await checkRes.json();
-
-    if(existing && existing.length>0){
-      await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}`,{
+    const existing=await checkRes.json();
+    if(existing&&existing.length>0){
+      await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}&team=eq.${encodeURIComponent(team)}`,{
         method:'PATCH',
         headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
         body:JSON.stringify({slots:JSON.stringify(slots)})
@@ -207,16 +249,14 @@ async function submitAvailability(){
       await fetch(`${SUPABASE_URL}/rest/v1/responses`,{
         method:'POST',
         headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-        body:JSON.stringify({founder_name:name,slots:JSON.stringify(slots)})
+        body:JSON.stringify({founder_name:name,team:team,slots:JSON.stringify(slots)})
       });
     }
     showToast('✓ Saved! You can update your availability anytime by re-submitting.','success');
   } catch(e){
     showToast('Something went wrong. Please try again.','error');
   }
-
-  btn.disabled=false;
-  btn.textContent='Save my availability →';
+  btn.disabled=false;btn.textContent='Save my availability →';
 }
 
 function showToast(msg,type){
@@ -225,6 +265,20 @@ function showToast(msg,type){
   t.className='toast'+(type==='error'?' error':'');
   t.style.display='block';
   setTimeout(()=>t.style.display='none',4000);
+}
+
+function checkPassword(){
+  const input=document.getElementById('password-input').value;
+  if(input===ORG_PASSWORD){
+    orgUnlocked=true;
+    document.getElementById('password-overlay').style.display='none';
+    document.getElementById('org-inner').style.display='block';
+    buildOrgView();
+  } else {
+    document.getElementById('password-error').style.display='block';
+    document.getElementById('password-input').value='';
+    document.getElementById('password-input').focus();
+  }
 }
 
 function heatStyle(count,max){
@@ -242,7 +296,7 @@ async function buildOrgView(){
 
   let rows=[];
   try{
-    const res=await fetch(`${SUPABASE_URL}/rest/v1/responses?select=founder_name,slots`,{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/responses?select=founder_name,team,slots`,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
     });
     rows=await res.json();
@@ -251,39 +305,59 @@ async function buildOrgView(){
     return;
   }
 
-  if(!rows.length){
-    c.innerHTML=`<div class="card"><div class="empty-state"><div class="icon">📭</div><p>No responses yet. Share the Availability Form link with your founders.</p></div></div>`;
-    return;
-  }
-
-  const responses={};
+  const teamData={};
+  TEAMS.forEach(t=>teamData[t]={});
   rows.forEach(r=>{
-    try{responses[r.founder_name]=JSON.parse(r.slots||'[]');}catch(e){responses[r.founder_name]=[];}
+    if(r.team&&teamData[r.team]!==undefined){
+      try{teamData[r.team][r.founder_name]=JSON.parse(r.slots||'[]');}catch(e){teamData[r.team][r.founder_name]=[];}
+    }
   });
-
-  const names=Object.keys(responses);
-  const total=names.length;
-  const counts={};
-  names.forEach(n=>(responses[n]||[]).forEach(sk=>{counts[sk]=(counts[sk]||0)+1;}));
-  const globalMax=Math.max(...Object.values(counts),1);
-
-  const monthWeeks=[
-    {label:'October 2026',key:'oct',input:'oct-week'},
-    {label:'November 2026',key:'nov',input:'nov-week'},
-    {label:'December 2026',key:'dec',input:'dec-week'}
-  ];
 
   let html=`<div class="card cohort-section">
     <h2>Cohort settings</h2>
     <p style="font-size:13px;color:#666;margin-bottom:12px">Update the target week for each month. Enter the Monday date (e.g. "Oct 5") and days will auto-fill Mon–Fri.</p>
     <div class="date-grid">`;
-  MONTHS.forEach((m,i)=>{
+  MONTHS.forEach(m=>{
     html+=`<div class="date-field"><label>${m.label}</label><input type="text" id="week-${m.key}" placeholder="e.g. Oct 5" value="${m.dates[0].d}" /></div>`;
   });
   html+=`</div><button class="update-dates-btn" onclick="updateDates()">Update dates & rebuild form →</button></div>`;
 
   html+=`<button class="reset-btn" onclick="resetResponses()">Clear all responses</button>`;
-  html+=`<div class="pills"><span class="resp-count">${total} response${total!==1?'s':''} received</span>`;
+
+  html+=`<div class="team-tabs">`;
+  TEAMS.forEach(t=>{
+    const count=Object.keys(teamData[t]).length;
+    html+=`<button class="team-tab${t===activeTeam?' active':''}" onclick="switchTeam('${t}',this)">${t}${count>0?` <span style="opacity:0.6">(${count})</span>`:''}</button>`;
+  });
+  html+=`</div><div id="team-view"></div>`;
+
+  c.innerHTML=html;
+  renderTeamView(teamData[activeTeam],activeTeam);
+  window._teamData=teamData;
+}
+
+function switchTeam(team,btn){
+  activeTeam=team;
+  document.querySelectorAll('.team-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderTeamView(window._teamData[team],team);
+}
+
+function renderTeamView(responses,teamName){
+  const tv=document.getElementById('team-view');
+  const names=Object.keys(responses);
+  const total=names.length;
+
+  if(!total){
+    tv.innerHTML=`<div class="card"><div class="empty-state"><div class="icon">📭</div><p>No responses from ${teamName} yet.</p></div></div>`;
+    return;
+  }
+
+  const counts={};
+  names.forEach(n=>(responses[n]||[]).forEach(sk=>{counts[sk]=(counts[sk]||0)+1;}));
+  const globalMax=Math.max(...Object.values(counts),1);
+
+  let html=`<div class="pills"><span class="resp-count">${total} response${total!==1?'s':''} from ${teamName}</span>`;
   names.forEach(n=>{html+=`<span class="pill">👤 ${n}</span>`;});
   html+=`</div>`;
 
@@ -301,7 +375,7 @@ async function buildOrgView(){
 
   html+=`<div class="card best-section"><h2>Best slots by overlap</h2>`;
   const top=ranked.slice(0,8);
-  if(!top.length){html+=`<p style="font-size:13px;color:#aaa">No overlapping slots yet.</p>`;}
+  if(!top.length){html+=`<p class="no-responses">No overlapping slots yet.</p>`;}
   top.forEach(s=>{
     const pct=Math.round((s.cnt/total)*100);
     html+=`<div class="best-slot">
@@ -338,8 +412,7 @@ async function buildOrgView(){
     html+=`</div></div><br>`;
   });
   html+=`</div>`;
-
-  c.innerHTML=html;
+  tv.innerHTML=html;
 }
 
 function updateDates(){
@@ -351,10 +424,7 @@ function updateDates(){
     const mon=parts[0];
     const startDay=parseInt(parts[1]);
     if(isNaN(startDay)) return m;
-    return {
-      ...m,
-      dates:DAYS.map((day,i)=>({day,d:`${mon} ${startDay+i}`}))
-    };
+    return {...m,dates:DAYS.map((day,i)=>({day,d:`${mon} ${startDay+i}`}))};
   });
   MONTHS=newMonths;
   localStorage.setItem('fc_months',JSON.stringify(MONTHS));
@@ -364,7 +434,7 @@ function updateDates(){
 }
 
 async function resetResponses(){
-  if(!confirm('This will delete all founder responses. Are you sure?')) return;
+  if(!confirm('This will delete ALL responses across all teams. Are you sure?')) return;
   try{
     await fetch(`${SUPABASE_URL}/rest/v1/responses?id=gt.0`,{
       method:'DELETE',
@@ -381,7 +451,7 @@ function showPage(id,btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  if(id==='organizer') buildOrgView();
+  if(id==='organizer'&&orgUnlocked) buildOrgView();
 }
 
 buildFounderGrids();
