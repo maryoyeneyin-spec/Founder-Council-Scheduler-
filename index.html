@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founder Council — Scheduling</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f1;color:#1a1a1a;min-height:100vh}
+.topbar{background:#fff;border-bottom:1px solid #e5e5e0;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-size:14px;font-weight:600;letter-spacing:-0.01em;color:#1a1a1a}
+.topbar-logo span{color:#888}
+.tabs{display:flex;gap:4px}
+.tab{padding:7px 14px;border:none;border-radius:6px;font-size:13px;cursor:pointer;background:transparent;color:#666;font-family:inherit;transition:all 0.15s}
+.tab:hover{background:#f0efe9;color:#1a1a1a}
+.tab.active{background:#1a1a1a;color:#fff}
+.container{max-width:860px;margin:0 auto;padding:2rem 1.5rem}
+.page{display:none}
+.page.active{display:block}
+.page-header{margin-bottom:2rem}
+.page-header h1{font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:6px}
+.page-header p{font-size:14px;color:#666;line-height:1.6}
+.card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1.5rem;margin-bottom:1.25rem}
+.name-section{margin-bottom:1.5rem}
+.name-section label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#888;display:block;margin-bottom:8px}
+.name-input-row{display:flex;gap:10px}
+.name-input-row input{flex:1;padding:9px 13px;border:1px solid #e0e0db;border-radius:8px;font-size:14px;font-family:inherit;background:#fff;color:#1a1a1a;outline:none;transition:border-color 0.15s}
+.name-input-row input:focus{border-color:#1a1a1a}
+.month-block{margin-bottom:2rem}
+.month-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.month-title::after{content:'';flex:1;height:1px;background:#e5e5e0}
+.grid-scroll{overflow-x:auto;padding-bottom:4px}
+.grid{display:inline-grid;gap:3px}
+.cell{display:flex;align-items:center;justify-content:center;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;user-select:none;transition:all 0.1s}
+.cell.slot{width:46px;height:30px;background:#f5f4f1;border:1px solid #e5e5e0;color:#aaa}
+.cell.slot:hover{border-color:#999;background:#eee}
+.cell.slot.on{background:#16a37f;border-color:#128f6e;color:#fff}
+.cell.time-lbl{width:54px;height:30px;font-size:11px;color:#999;justify-content:flex-end;padding-right:8px;cursor:default;background:transparent;border:none}
+.cell.day-lbl{width:46px;height:28px;font-size:10px;color:#888;flex-direction:column;gap:1px;cursor:default;background:transparent;border:none;font-weight:600}
+.cell.day-lbl span{font-weight:400;color:#bbb;font-size:9px}
+.cell.corner{width:54px;height:28px;background:transparent;border:none;cursor:default}
+.submit-btn{width:100%;padding:11px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:opacity 0.15s;margin-top:0.5rem}
+.submit-btn:hover{opacity:0.85}
+.submit-btn:active{opacity:0.7}
+.submit-btn:disabled{opacity:0.4;cursor:not-allowed}
+.toast{display:none;margin-top:1rem;padding:11px 16px;background:#e8f7f2;border:1px solid #b2dfd1;border-radius:8px;color:#0f6e56;font-size:13px}
+.toast.error{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.5rem;align-items:center}
+.pill{padding:4px 10px;border-radius:20px;font-size:12px;background:#f0efe9;border:1px solid #e5e5e0;color:#555}
+.resp-count{font-size:13px;color:#666;margin-right:4px}
+.best-section h2,.heat-section h2{font-size:14px;font-weight:600;margin-bottom:12px;color:#1a1a1a}
+.best-slot{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid #e5e5e0;border-radius:8px;margin-bottom:6px;background:#fff}
+.best-slot-label{font-size:13px;min-width:190px;color:#1a1a1a}
+.bar-wrap{flex:1;height:7px;background:#f0efe9;border-radius:4px;overflow:hidden;min-width:60px}
+.bar-fill{height:100%;background:#16a37f;border-radius:4px}
+.bar-score{font-size:12px;color:#888;min-width:36px;text-align:right}
+.heat-section{margin-top:1.5rem}
+.heat-month-title{font-size:12px;font-weight:600;color:#888;margin:1.25rem 0 10px;text-transform:uppercase;letter-spacing:0.06em}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.25rem}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#888}
+.legend-swatch{width:13px;height:13px;border-radius:3px;border:1px solid rgba(0,0,0,0.08)}
+.empty-state{text-align:center;padding:3rem 1rem;color:#aaa}
+.empty-state .icon{font-size:36px;margin-bottom:12px}
+.empty-state p{font-size:14px}
+.loading{text-align:center;padding:2rem;color:#aaa;font-size:14px}
+.reset-btn{padding:7px 14px;border:1px solid #fca5a5;border-radius:8px;font-size:13px;cursor:pointer;background:#fff;color:#991b1b;font-family:inherit;float:right;margin-bottom:1rem}
+.reset-btn:hover{background:#fef2f2}
+.cohort-section{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #e5e5e0}
+.cohort-section h2{font-size:14px;font-weight:600;margin-bottom:12px}
+.date-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.date-field label{font-size:11px;color:#888;display:block;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em}
+.date-field input{width:100%;padding:7px 10px;border:1px solid #e0e0db;border-radius:6px;font-size:13px;font-family:inherit;color:#1a1a1a;background:#fff;outline:none}
+.date-field input:focus{border-color:#1a1a1a}
+.update-dates-btn{margin-top:10px;padding:7px 14px;border:1px solid #e0e0db;border-radius:6px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;font-family:inherit}
+.update-dates-btn:hover{background:#f5f4f1}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-logo">SFU VentureLabs <span>/ Founder Council</span></div>
+  <div class="tabs">
+    <button class="tab active" onclick="showPage('founder',this)">Availability Form</button>
+    <button class="tab" onclick="showPage('organizer',this)">Organizer View</button>
+  </div>
+</div>
+
+<div class="container">
+  <div id="founder" class="page active">
+    <div class="page-header">
+      <h1>Share your availability</h1>
+      <p>Select every slot that works for you in October, November, and December. The Founder Council meets once per month for one hour, Monday–Friday between 8am and 6pm.</p>
+    </div>
+    <div class="card">
+      <div class="name-section">
+        <label>Your name</label>
+        <div class="name-input-row">
+          <input type="text" id="founder-name" placeholder="First and last name" />
+        </div>
+      </div>
+      <div id="grids-container"></div>
+      <button class="submit-btn" id="submit-btn" onclick="submitAvailability()">Save my availability →</button>
+      <div class="toast" id="toast"></div>
+    </div>
+  </div>
+
+  <div id="organizer" class="page">
+    <div class="page-header">
+      <h1>Organizer view</h1>
+      <p>Live response summary, best slot recommendations, and availability heatmaps for all three months.</p>
+    </div>
+    <div id="org-content"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://xvvqripkovebllvvnyeg.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2dnFyaXBrb3ZlYmxsdnZueWVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNDY0NzQsImV4cCI6MjA5NzcyMjQ3NH0.Ca8s1b821IzvRu5G10bkzrthWzuZzmv4MgZ3jNne7DI';
+
+const DEFAULT_MONTHS = [
+  {label:'October 2026',key:'oct',dates:[{d:'Oct 5',day:'Mon'},{d:'Oct 6',day:'Tue'},{d:'Oct 7',day:'Wed'},{d:'Oct 8',day:'Thu'},{d:'Oct 9',day:'Fri'}]},
+  {label:'November 2026',key:'nov',dates:[{d:'Nov 2',day:'Mon'},{d:'Nov 3',day:'Tue'},{d:'Nov 4',day:'Wed'},{d:'Nov 5',day:'Thu'},{d:'Nov 6',day:'Fri'}]},
+  {label:'December 2026',key:'dec',dates:[{d:'Dec 7',day:'Mon'},{d:'Dec 8',day:'Tue'},{d:'Dec 9',day:'Wed'},{d:'Dec 10',day:'Thu'},{d:'Dec 11',day:'Fri'}]}
+];
+
+const HOURS = [];
+for(let h=8;h<18;h++) HOURS.push({label:h===12?'12pm':h<12?h+'am':(h-12)+'pm',val:h});
+
+let MONTHS = JSON.parse(localStorage.getItem('fc_months')||'null') || DEFAULT_MONTHS;
+let selected = {};
+
+function slotKey(mkey,di,hi){ return `${mkey}_${di}_${hi}`; }
+
+function buildFounderGrids(){
+  const c = document.getElementById('grids-container');
+  c.innerHTML='';
+  MONTHS.forEach(m=>{
+    const block = document.createElement('div');
+    block.className='month-block';
+    block.innerHTML=`<div class="month-title">${m.label}</div>`;
+    const scroll = document.createElement('div');
+    scroll.className='grid-scroll';
+    const grid = document.createElement('div');
+    grid.className='grid';
+    grid.style.gridTemplateColumns=`54px repeat(${m.dates.length},46px)`;
+
+    const corner=document.createElement('div');
+    corner.className='cell corner';
+    grid.appendChild(corner);
+    m.dates.forEach(date=>{
+      const lbl=document.createElement('div');
+      lbl.className='cell day-lbl';
+      lbl.innerHTML=`${date.day}<span>${date.d}</span>`;
+      grid.appendChild(lbl);
+    });
+
+    HOURS.forEach((hr,hi)=>{
+      const tl=document.createElement('div');
+      tl.className='cell time-lbl';
+      tl.textContent=hr.label;
+      grid.appendChild(tl);
+      m.dates.forEach((date,di)=>{
+        const sk=slotKey(m.key,di,hi);
+        const cell=document.createElement('div');
+        cell.className='cell slot'+(selected[sk]?' on':'');
+        cell.dataset.key=sk;
+        cell.addEventListener('mousedown',e=>{e.preventDefault();toggleCell(sk,cell);});
+        cell.addEventListener('mouseenter',e=>{if(e.buttons===1)toggleCell(sk,cell);});
+        grid.appendChild(cell);
+      });
+    });
+
+    scroll.appendChild(grid);
+    block.appendChild(scroll);
+    c.appendChild(block);
+  });
+}
+
+function toggleCell(key,cell){
+  selected[key]=!selected[key];
+  cell.classList.toggle('on',!!selected[key]);
+}
+
+async function submitAvailability(){
+  const name=document.getElementById('founder-name').value.trim();
+  if(!name){document.getElementById('founder-name').focus();showToast('Please enter your name first.','error');return;}
+  const slots=Object.keys(selected).filter(k=>selected[k]);
+  if(!slots.length){showToast('Please select at least one available slot.','error');return;}
+
+  const btn=document.getElementById('submit-btn');
+  btn.disabled=true;
+  btn.textContent='Saving...';
+
+  try{
+    const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}&select=id`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    });
+    const existing = await checkRes.json();
+
+    if(existing && existing.length>0){
+      await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}`,{
+        method:'PATCH',
+        headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({slots:JSON.stringify(slots)})
+      });
+    } else {
+      await fetch(`${SUPABASE_URL}/rest/v1/responses`,{
+        method:'POST',
+        headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({founder_name:name,slots:JSON.stringify(slots)})
+      });
+    }
+    showToast('✓ Saved! You can update your availability anytime by re-submitting.','success');
+  } catch(e){
+    showToast('Something went wrong. Please try again.','error');
+  }
+
+  btn.disabled=false;
+  btn.textContent='Save my availability →';
+}
+
+function showToast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(type==='error'?' error':'');
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',4000);
+}
+
+function heatStyle(count,max){
+  if(!count) return {bg:'#f5f4f1',border:'#e5e5e0',color:'#ccc'};
+  const r=count/max;
+  if(r<=0.25) return {bg:'#d1f0e6',border:'#a3ddd0',color:'#0f6e56'};
+  if(r<=0.5)  return {bg:'#5dcaa5',border:'#1d9e75',color:'#fff'};
+  if(r<=0.75) return {bg:'#16a37f',border:'#0f8468',color:'#fff'};
+  return {bg:'#0a6b53',border:'#085041',color:'#fff'};
+}
+
+async function buildOrgView(){
+  const c=document.getElementById('org-content');
+  c.innerHTML='<div class="loading">Loading responses...</div>';
+
+  let rows=[];
+  try{
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/responses?select=founder_name,slots`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    });
+    rows=await res.json();
+  } catch(e){
+    c.innerHTML='<div class="card"><div class="empty-state"><p>Could not load responses. Check your connection and try again.</p></div></div>';
+    return;
+  }
+
+  if(!rows.length){
+    c.innerHTML=`<div class="card"><div class="empty-state"><div class="icon">📭</div><p>No responses yet. Share the Availability Form link with your founders.</p></div></div>`;
+    return;
+  }
+
+  const responses={};
+  rows.forEach(r=>{
+    try{responses[r.founder_name]=JSON.parse(r.slots||'[]');}catch(e){responses[r.founder_name]=[];}
+  });
+
+  const names=Object.keys(responses);
+  const total=names.length;
+  const counts={};
+  names.forEach(n=>(responses[n]||[]).forEach(sk=>{counts[sk]=(counts[sk]||0)+1;}));
+  const globalMax=Math.max(...Object.values(counts),1);
+
+  const monthWeeks=[
+    {label:'October 2026',key:'oct',input:'oct-week'},
+    {label:'November 2026',key:'nov',input:'nov-week'},
+    {label:'December 2026',key:'dec',input:'dec-week'}
+  ];
+
+  let html=`<div class="card cohort-section">
+    <h2>Cohort settings</h2>
+    <p style="font-size:13px;color:#666;margin-bottom:12px">Update the target week for each month. Enter the Monday date (e.g. "Oct 5") and days will auto-fill Mon–Fri.</p>
+    <div class="date-grid">`;
+  MONTHS.forEach((m,i)=>{
+    html+=`<div class="date-field"><label>${m.label}</label><input type="text" id="week-${m.key}" placeholder="e.g. Oct 5" value="${m.dates[0].d}" /></div>`;
+  });
+  html+=`</div><button class="update-dates-btn" onclick="updateDates()">Update dates & rebuild form →</button></div>`;
+
+  html+=`<button class="reset-btn" onclick="resetResponses()">Clear all responses</button>`;
+  html+=`<div class="pills"><span class="resp-count">${total} response${total!==1?'s':''} received</span>`;
+  names.forEach(n=>{html+=`<span class="pill">👤 ${n}</span>`;});
+  html+=`</div>`;
+
+  const ranked=[];
+  MONTHS.forEach(m=>{
+    HOURS.forEach((hr,hi)=>{
+      m.dates.forEach((date,di)=>{
+        const sk=slotKey(m.key,di,hi);
+        const cnt=counts[sk]||0;
+        if(cnt>0) ranked.push({sk,cnt,label:`${date.d} (${date.day}) ${hr.label}`,month:m.label});
+      });
+    });
+  });
+  ranked.sort((a,b)=>b.cnt-a.cnt);
+
+  html+=`<div class="card best-section"><h2>Best slots by overlap</h2>`;
+  const top=ranked.slice(0,8);
+  if(!top.length){html+=`<p style="font-size:13px;color:#aaa">No overlapping slots yet.</p>`;}
+  top.forEach(s=>{
+    const pct=Math.round((s.cnt/total)*100);
+    html+=`<div class="best-slot">
+      <div class="best-slot-label">${s.label} <span style="font-size:11px;color:#aaa">— ${s.month}</span></div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="bar-score">${s.cnt}/${total}</div>
+    </div>`;
+  });
+  html+=`</div>`;
+
+  html+=`<div class="card heat-section"><h2>Availability heatmaps</h2>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-swatch" style="background:#d1f0e6;border-color:#a3ddd0"></div> 1 person</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#5dcaa5;border-color:#1d9e75"></div> Some</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#16a37f"></div> Most</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#0a6b53"></div> Everyone</div>
+  </div>`;
+
+  MONTHS.forEach(m=>{
+    html+=`<div class="heat-month-title">${m.label}</div><div class="grid-scroll"><div class="grid" style="display:inline-grid;gap:3px;grid-template-columns:54px repeat(${m.dates.length},46px)">`;
+    html+=`<div style="width:54px;height:28px"></div>`;
+    m.dates.forEach(date=>{
+      html+=`<div style="width:46px;height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#888;gap:1px">${date.day}<span style="font-weight:400;color:#bbb;font-size:9px">${date.d}</span></div>`;
+    });
+    HOURS.forEach((hr,hi)=>{
+      html+=`<div style="width:54px;height:30px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;color:#999">${hr.label}</div>`;
+      m.dates.forEach((date,di)=>{
+        const sk=slotKey(m.key,di,hi);
+        const cnt=counts[sk]||0;
+        const st=heatStyle(cnt,globalMax);
+        html+=`<div style="width:46px;height:30px;border-radius:5px;border:1px solid ${st.border};background:${st.bg};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:${st.color}">${cnt||''}</div>`;
+      });
+    });
+    html+=`</div></div><br>`;
+  });
+  html+=`</div>`;
+
+  c.innerHTML=html;
+}
+
+function updateDates(){
+  const DAYS=['Mon','Tue','Wed','Thu','Fri'];
+  const newMonths=MONTHS.map(m=>{
+    const raw=document.getElementById(`week-${m.key}`).value.trim();
+    if(!raw) return m;
+    const parts=raw.split(' ');
+    const mon=parts[0];
+    const startDay=parseInt(parts[1]);
+    if(isNaN(startDay)) return m;
+    return {
+      ...m,
+      dates:DAYS.map((day,i)=>({day,d:`${mon} ${startDay+i}`}))
+    };
+  });
+  MONTHS=newMonths;
+  localStorage.setItem('fc_months',JSON.stringify(MONTHS));
+  selected={};
+  buildFounderGrids();
+  alert('Dates updated! The availability form has been rebuilt with the new weeks.');
+}
+
+async function resetResponses(){
+  if(!confirm('This will delete all founder responses. Are you sure?')) return;
+  try{
+    await fetch(`${SUPABASE_URL}/rest/v1/responses?id=gt.0`,{
+      method:'DELETE',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    });
+    buildOrgView();
+  } catch(e){
+    alert('Could not clear responses. Try again.');
+  }
+}
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='organizer') buildOrgView();
+}
+
+buildFounderGrids();
+</script>
+</body>
+</html>
