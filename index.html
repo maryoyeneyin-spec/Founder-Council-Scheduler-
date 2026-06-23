@@ -96,8 +96,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .instructions ol{padding-left:1.25rem}
 .instructions ol li{margin-bottom:4px}
 .drag-hint{font-size:11px;color:#aaa;margin-bottom:6px}
-.slot-counter{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1rem}
-.slot-counter-item{font-size:12px;color:#666;background:#f5f4f1;border-radius:6px;padding:4px 10px}
+.slot-counter{display:flex;gap:12px;flex-wrap:wrap;position:sticky;top:56px;z-index:90;background:#f5f4f1;padding:10px 0;margin-bottom:1rem;border-bottom:1px solid #e5e5e0}
+.slot-counter-item{font-size:12px;color:#666;background:#fff;border:1px solid #e5e5e0;border-radius:6px;padding:4px 10px}
 .slot-counter-item span{font-weight:600;color:#16a37f}
 .saved-banner{display:none;padding:10px 14px;background:#e8f7f2;border:1px solid #b2dfd1;border-radius:8px;color:#0f6e56;font-size:13px;margin-top:0.75rem;align-items:center;gap:8px}
 .saved-banner.visible{display:flex}
@@ -141,7 +141,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <li>Enter your name and select your team from the dropdown</li>
         <li>Your available time slots will appear below — click or drag to select every slot that works for you</li>
         <li>Make sure to fill in all three months — October, November, and December</li>
-        <li>Hit <strong>Save my availability</strong> when you're done. You can come back and update anytime</li>
+        <li>Hit "Save my availability" when you're done — you can come back and update anytime</li>
       </ol>
     </div>
     <div class="card">
