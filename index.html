@@ -175,11 +175,14 @@ const DEFAULT_HOUR_RANGE = [8, 18];
 const DEFAULT_MONTHS = [
   {label:'October 2026', key:'oct', dates:[{d:'Oct 5',day:'Mon'},{d:'Oct 6',day:'Tue'},{d:'Oct 7',day:'Wed'},{d:'Oct 8',day:'Thu'},{d:'Oct 9',day:'Fri'}]},
   {label:'November 2026', key:'nov', dates:[{d:'Nov 9',day:'Mon'},{d:'Nov 10',day:'Tue'},{d:'Nov 12',day:'Thu'},{d:'Nov 13',day:'Fri'}]},
-  {label:'December 2026', key:'dec', dates:[{d:'Dec 4',day:'Fri'},{d:'Dec 7',day:'Mon'},{d:'Dec 8',day:'Tue'},{d:'Dec 9',day:'Wed'},{d:'Dec 10',day:'Thu'},{d:'Dec 11',day:'Fri'}]}
+  {label:'December 2026', key:'dec', dates:[{d:'Dec 7',day:'Mon'},{d:'Dec 8',day:'Tue'},{d:'Dec 9',day:'Wed'},{d:'Dec 10',day:'Thu'},{d:'Dec 11',day:'Fri'}]}
 ];
 
-// Zalvatech gets same months but dec has Dec 4 extra (already in DEFAULT_MONTHS for all)
-// Nov has no Nov 11 (already removed above)
+const ZALVATECH_MONTHS = [
+  {label:'October 2026', key:'oct', dates:[{d:'Oct 5',day:'Mon'},{d:'Oct 6',day:'Tue'},{d:'Oct 7',day:'Wed'},{d:'Oct 8',day:'Thu'},{d:'Oct 9',day:'Fri'}]},
+  {label:'November 2026', key:'nov', dates:[{d:'Nov 9',day:'Mon'},{d:'Nov 10',day:'Tue'},{d:'Nov 12',day:'Thu'},{d:'Nov 13',day:'Fri'}]},
+  {label:'December 2026', key:'dec', dates:[{d:'Dec 4',day:'Fri'},{d:'Dec 7',day:'Mon'},{d:'Dec 8',day:'Tue'},{d:'Dec 9',day:'Wed'},{d:'Dec 10',day:'Thu'},{d:'Dec 11',day:'Fri'}]}
+];
 
 let MONTHS = JSON.parse(localStorage.getItem('fc_months_v2')||'null') || DEFAULT_MONTHS;
 let selected = {};
@@ -212,6 +215,7 @@ function onTeamChange(){
 }
 
 function getMonthsForTeam(team){
+  if(team === 'Zalvatech') return ZALVATECH_MONTHS;
   return MONTHS;
 }
 
