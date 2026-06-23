@@ -91,6 +91,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .update-dates-btn:hover{background:#f5f4f1}
 .no-responses{font-size:13px;color:#aaa;padding:1rem 0}
 .time-range-note{font-size:12px;color:#888;margin-bottom:10px;padding:6px 10px;background:#f5f4f1;border-radius:6px;display:inline-block}
+.instructions{background:#f0f7ff;border:1px solid #c8dff7;border-radius:10px;padding:14px 16px;margin-bottom:1.25rem;font-size:13px;color:#1a3a5c;line-height:1.6}
+.instructions strong{display:block;margin-bottom:6px;font-size:14px;color:#1a1a1a}
+.instructions ol{padding-left:1.25rem}
+.instructions ol li{margin-bottom:4px}
+.drag-hint{font-size:11px;color:#aaa;margin-bottom:6px}
+.slot-counter{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1rem}
+.slot-counter-item{font-size:12px;color:#666;background:#f5f4f1;border-radius:6px;padding:4px 10px}
+.slot-counter-item span{font-weight:600;color:#16a37f}
+.saved-banner{display:none;padding:10px 14px;background:#e8f7f2;border:1px solid #b2dfd1;border-radius:8px;color:#0f6e56;font-size:13px;margin-top:0.75rem;align-items:center;gap:8px}
+.saved-banner.visible{display:flex}
+.scroll-hint{font-size:11px;color:#aaa;margin-bottom:4px;display:none}
+@media(max-width:600px){
+  .field-row{grid-template-columns:1fr}
+  .topbar{padding:0 1rem}
+  .topbar-logo span{display:none}
+  .container{padding:1.25rem 1rem}
+  .cell.slot{width:38px;height:20px}
+  .cell.day-lbl{width:38px}
+  .cell.time-lbl{width:48px;font-size:9px}
+  .cell.corner{width:48px}
+  .grid{gap:2px}
+  .scroll-hint{display:block}
+  .tabs .tab{padding:6px 10px;font-size:12px}
+  .date-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -110,6 +135,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <p>Select every slot that works for you in October, November, and December. The Founder Council meets once per month for one hour.</p>
     </div>
     <div class="tz-badge">🕐 All times are Pacific Time (PT)</div>
+    <div class="instructions">
+      <strong>How to fill this out</strong>
+      <ol>
+        <li>Enter your name and select your team from the dropdown</li>
+        <li>Your available time slots will appear below — click or drag to select every slot that works for you</li>
+        <li>Make sure to fill in all three months — October, November, and December</li>
+        <li>Hit <strong>Save my availability</strong> when you're done. You can come back and update anytime</li>
+      </ol>
+    </div>
     <div class="card">
       <div class="field-row">
         <div class="field-section">
@@ -132,9 +166,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           </select>
         </div>
       </div>
-      <div id="grids-container"><p style="font-size:13px;color:#aaa;padding:1rem 0">Select your team above to see availability slots.</p></div>
+      <div id="slot-counter" class="slot-counter" style="display:none"></div>
+      <div id="grids-container"><p style="font-size:13px;color:#aaa;padding:1rem 0">👆 Select your team above to see availability slots.</p></div>
       <button class="submit-btn" id="submit-btn" onclick="submitAvailability()">Save my availability →</button>
       <div class="toast" id="toast"></div>
+      <div class="saved-banner" id="saved-banner">✓ Your availability has been saved successfully. You can update it anytime by re-submitting.</div>
     </div>
   </div>
 
@@ -211,12 +247,28 @@ function onTeamChange(){
   selected = {};
   const team = document.getElementById('founder-team').value;
   if(!team) return;
+  document.getElementById('saved-banner').classList.remove('visible');
   buildFounderGrids(team);
+  updateCounter(team);
 }
 
 function getMonthsForTeam(team){
   if(team === 'Zalvatech') return ZALVATECH_MONTHS;
   return MONTHS;
+}
+
+function updateCounter(team){
+  const months = getMonthsForTeam(team);
+  const counter = document.getElementById('slot-counter');
+  if(!counter) return;
+  counter.style.display = 'flex';
+  counter.innerHTML = months.map(m => {
+    const count = m.dates.reduce((acc, date, di) => {
+      const hours = getHoursForTeam(team);
+      return acc + hours.filter((hr,hi) => selected[slotKey(m.key,di,hi)]).length;
+    }, 0);
+    return `<div class="slot-counter-item">${m.label.split(' ')[0]}: <span>${count} slot${count!==1?'s':''} selected</span></div>`;
+  }).join('');
 }
 
 function buildFounderGrids(team){
@@ -233,10 +285,10 @@ function buildFounderGrids(team){
     c.appendChild(note);
   }
 
-  months.forEach(m=>{
+  months.forEach((m, mIdx)=>{
     const block = document.createElement('div');
     block.className = 'month-block';
-    block.innerHTML = `<div class="month-title">${m.label}</div>`;
+    block.innerHTML = `<div class="month-title">${m.label}</div><div class="scroll-hint">← Swipe to see all days →</div><div class="drag-hint">Click or drag to select slots</div>`;
     const scroll = document.createElement('div');
     scroll.className = 'grid-scroll';
     const grid = document.createElement('div');
@@ -278,6 +330,8 @@ function buildFounderGrids(team){
 function toggleCell(key, cell){
   selected[key] = !selected[key];
   cell.classList.toggle('on', !!selected[key]);
+  const team = document.getElementById('founder-team').value;
+  if(team) updateCounter(team);
 }
 
 async function submitAvailability(){
@@ -310,6 +364,7 @@ async function submitAvailability(){
       });
     }
     showToast('✓ Saved! You can update your availability anytime by re-submitting.','success');
+    document.getElementById('saved-banner').classList.add('visible');
   } catch(e){
     showToast('Something went wrong. Please try again.','error');
   }
