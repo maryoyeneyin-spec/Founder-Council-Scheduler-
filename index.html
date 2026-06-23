@@ -512,7 +512,17 @@ async function buildOrgView(){
   });
   html += `</div><button class="update-dates-btn" onclick="updateDates()">Update dates & rebuild form →</button></div>`;
   html += `<button class="reset-btn" onclick="resetResponses()">Clear all responses</button>`;
+
+  // Build response status table inline
+  let statusHtml = `<div class="card" style="margin-bottom:1.25rem"><h2 style="font-size:14px;font-weight:600;margin-bottom:12px">Response status</h2><table class="status-table"><thead><tr><th>Team</th><th>Status</th><th>Respondents</th></tr></thead><tbody>`;
+  TEAMS.forEach(t=>{
+    const tNames = Object.keys(teamData[t]);
+    const responded = tNames.length > 0;
+    statusHtml += `<tr><td style="font-weight:500">${t}</td><td><span class="status-badge ${responded?'done':'pending'}">${responded?'✓ Responded':'⏳ Pending'}</span></td><td style="color:#666">${responded ? tNames.join(', ') : '—'}</td></tr>`;
+  });
+  statusHtml += `</tbody></table></div>`;
   html += statusHtml;
+
   html += `<div class="team-tabs">`;
   TEAMS.forEach(t=>{
     const count = Object.keys(teamData[t]).length;
@@ -521,8 +531,8 @@ async function buildOrgView(){
   html += `</div><div id="team-view"></div>`;
 
   c.innerHTML = html;
-  renderTeamView(teamData[activeTeam], activeTeam);
   window._teamData = teamData;
+  requestAnimationFrame(()=>renderTeamView(teamData[activeTeam], activeTeam));
 }
 
 function switchTeam(team, btn){
