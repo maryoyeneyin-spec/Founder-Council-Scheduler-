@@ -116,6 +116,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .tabs .tab{padding:6px 10px;font-size:12px}
   .date-grid{grid-template-columns:1fr}
 }
+.clear-month-btn{font-size:11px;color:#999;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;margin-left:8px;text-decoration:underline}
+.clear-month-btn:hover{color:#991b1b}
+.confirm-summary{display:none;margin-top:1rem;padding:14px 16px;background:#f0f7ff;border:1px solid #c8dff7;border-radius:8px;font-size:13px;color:#1a3a5c}
+.confirm-summary strong{display:block;margin-bottom:8px;font-size:14px;color:#1a1a1a}
+.confirm-summary-month{margin-bottom:6px}
+.confirm-summary-month b{display:block;font-size:12px;color:#555;margin-bottom:2px}
+.confirm-summary-slots{font-size:12px;color:#444;line-height:1.7}
+.status-table{width:100%;border-collapse:collapse;font-size:13px}
+.status-table th{text-align:left;padding:8px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#888;border-bottom:1px solid #e5e5e0}
+.status-table td{padding:9px 12px;border-bottom:1px solid #f0efe9}
+.status-table tr:last-child td{border-bottom:none}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600}
+.status-badge.done{background:#e8f7f2;color:#0f6e56}
+.status-badge.pending{background:#fef9ec;color:#92660a}
+.loading-slots{font-size:12px;color:#aaa;font-style:italic;margin-bottom:8px}
 </style>
 </head>
 <body>
@@ -148,7 +163,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="field-row">
         <div class="field-section">
           <label>Your name</label>
-          <input type="text" id="founder-name" placeholder="First and last name" />
+          <input type="text" id="founder-name" placeholder="First and last name" onblur="onNameBlur()" />
         </div>
         <div class="field-section">
           <label>Your team</label>
@@ -171,6 +186,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="submit-btn" id="submit-btn" onclick="submitAvailability()">Save my availability →</button>
       <div class="toast" id="toast"></div>
       <div class="saved-banner" id="saved-banner">✓ Your availability has been saved successfully. You can update it anytime by re-submitting.</div>
+      <div class="confirm-summary" id="confirm-summary">
+        <strong>Your selected slots</strong>
+        <div id="confirm-summary-body"></div>
+      </div>
     </div>
   </div>
 
@@ -243,18 +262,76 @@ function formatHour(h, min){
 
 function slotKey(mkey, di, hi){ return `${mkey}_${di}_${hi}`; }
 
-function onTeamChange(){
+async function onTeamChange(){
   selected = {};
   const team = document.getElementById('founder-team').value;
+  const name = document.getElementById('founder-name').value.trim();
   if(!team) return;
   document.getElementById('saved-banner').classList.remove('visible');
+  document.getElementById('confirm-summary').style.display = 'none';
   buildFounderGrids(team);
   updateCounter(team);
+  if(name) await loadPreviousSelections(name, team);
+}
+
+function onNameBlur(){
+  const name = document.getElementById('founder-name').value.trim();
+  const team = document.getElementById('founder-team').value;
+  if(name && team) loadPreviousSelections(name, team);
+}
+
+async function loadPreviousSelections(name, team){
+  const c = document.getElementById('grids-container');
+  const hint = document.createElement('div');
+  hint.className = 'loading-slots';
+  hint.id = 'loading-hint';
+  hint.textContent = 'Checking for previous submissions...';
+  c.insertBefore(hint, c.firstChild);
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}&team=eq.${encodeURIComponent(team)}&select=slots`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    });
+    const rows = await res.json();
+    if(rows && rows.length > 0){
+      const slots = JSON.parse(rows[0].slots || '[]');
+      slots.forEach(sk=>{
+        selected[sk] = true;
+        const cell = document.querySelector(`[data-key="${sk}"]`);
+        if(cell) cell.classList.add('on');
+      });
+      updateCounter(team);
+      const loadingHint = document.getElementById('loading-hint');
+      if(loadingHint) loadingHint.textContent = '✓ Previous selections loaded — adjust as needed and resubmit.';
+      setTimeout(()=>{ const h=document.getElementById('loading-hint'); if(h) h.remove(); }, 3000);
+    } else {
+      const loadingHint = document.getElementById('loading-hint');
+      if(loadingHint) loadingHint.remove();
+    }
+  } catch(e){
+    const loadingHint = document.getElementById('loading-hint');
+    if(loadingHint) loadingHint.remove();
+  }
 }
 
 function getMonthsForTeam(team){
   if(team === 'Zalvatech') return ZALVATECH_MONTHS;
   return MONTHS;
+}
+
+function clearMonth(mkey, team){
+  const hours = getHoursForTeam(team);
+  const months = getMonthsForTeam(team);
+  const month = months.find(m=>m.key===mkey);
+  if(!month) return;
+  month.dates.forEach((date,di)=>{
+    hours.forEach((hr,hi)=>{
+      const sk = slotKey(mkey,di,hi);
+      selected[sk] = false;
+      const cell = document.querySelector(`[data-key="${sk}"]`);
+      if(cell) cell.classList.remove('on');
+    });
+  });
+  updateCounter(team);
 }
 
 function updateCounter(team){
@@ -288,7 +365,7 @@ function buildFounderGrids(team){
   months.forEach((m, mIdx)=>{
     const block = document.createElement('div');
     block.className = 'month-block';
-    block.innerHTML = `<div class="month-title">${m.label}</div><div class="scroll-hint">← Swipe to see all days →</div><div class="drag-hint">Click or drag to select slots</div>`;
+    block.innerHTML = `<div class="month-title">${m.label}<button class="clear-month-btn" onclick="clearMonth('${m.key}','${team}')">Clear month</button></div><div class="scroll-hint">← Swipe to see all days →</div><div class="drag-hint">Click or drag to select slots</div>`;
     const scroll = document.createElement('div');
     scroll.className = 'grid-scroll';
     const grid = document.createElement('div');
@@ -365,6 +442,7 @@ async function submitAvailability(){
     }
     showToast('✓ Saved! You can update your availability anytime by re-submitting.','success');
     document.getElementById('saved-banner').classList.add('visible');
+    showConfirmSummary(team);
   } catch(e){
     showToast('Something went wrong. Please try again.','error');
   }
@@ -434,6 +512,7 @@ async function buildOrgView(){
   });
   html += `</div><button class="update-dates-btn" onclick="updateDates()">Update dates & rebuild form →</button></div>`;
   html += `<button class="reset-btn" onclick="resetResponses()">Clear all responses</button>`;
+  html += statusHtml;
   html += `<div class="team-tabs">`;
   TEAMS.forEach(t=>{
     const count = Object.keys(teamData[t]).length;
@@ -526,6 +605,50 @@ function renderTeamView(responses, teamName){
   });
   html += `</div>`;
   tv.innerHTML = html;
+}
+
+function showConfirmSummary(team){
+  const months = getMonthsForTeam(team);
+  const hours = getHoursForTeam(team);
+  const summary = document.getElementById('confirm-summary');
+  const body = document.getElementById('confirm-summary-body');
+  const monthNames = {oct:'October',nov:'November',dec:'December'};
+
+  let hasAny = false;
+  let html = '';
+  months.forEach(m=>{
+    const slots = [];
+    m.dates.forEach((date,di)=>{
+      hours.forEach((hr,hi)=>{
+        const sk = slotKey(m.key,di,hi);
+        if(selected[sk]){
+          // Group consecutive half-hour slots into ranges
+          slots.push({date:date.d, day:date.day, hr:hr, hi:hi, di:di});
+        }
+      });
+    });
+    if(slots.length){
+      hasAny = true;
+      // Group by date then format as ranges
+      const byDate = {};
+      slots.forEach(s=>{
+        const key = `${s.date}(${s.day})`;
+        if(!byDate[key]) byDate[key] = [];
+        byDate[key].push(s.hr.label);
+      });
+      html += `<div class="confirm-summary-month"><b>${m.label}</b><div class="confirm-summary-slots">`;
+      Object.entries(byDate).forEach(([dateKey, times])=>{
+        // Build ranges from consecutive times
+        html += `${dateKey}: ${times.join(', ')}<br>`;
+      });
+      html += `</div></div>`;
+    }
+  });
+
+  if(hasAny){
+    body.innerHTML = html;
+    summary.style.display = 'block';
+  }
 }
 
 function confirmSlot(encoded){
