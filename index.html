@@ -14,12 +14,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab{padding:7px 14px;border:none;border-radius:6px;font-size:13px;cursor:pointer;background:transparent;color:#666;font-family:inherit;transition:all 0.15s}
 .tab:hover{background:#f0efe9;color:#1a1a1a}
 .tab.active{background:#1a1a1a;color:#fff}
-.container{max-width:860px;margin:0 auto;padding:2rem 1.5rem}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem}
 .page{display:none}
 .page.active{display:block}
-.page-header{margin-bottom:2rem}
+.page-header{margin-bottom:1.5rem}
 .page-header h1{font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:6px}
 .page-header p{font-size:14px;color:#666;line-height:1.6}
+.tz-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:#fff8e1;border:1px solid #f9d94e;border-radius:20px;font-size:12px;font-weight:600;color:#7a5c00;margin-bottom:1.25rem}
 .card{background:#fff;border:1px solid #e5e5e0;border-radius:12px;padding:1.5rem;margin-bottom:1.25rem}
 .field-section{margin-bottom:1.5rem}
 .field-section label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#888;display:block;margin-bottom:8px}
@@ -30,18 +31,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .month-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .month-title::after{content:'';flex:1;height:1px;background:#e5e5e0}
 .grid-scroll{overflow-x:auto;padding-bottom:4px}
-.grid{display:inline-grid;gap:3px}
-.cell{display:flex;align-items:center;justify-content:center;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;user-select:none;transition:all 0.1s}
-.cell.slot{width:46px;height:30px;background:#f5f4f1;border:1px solid #e5e5e0;color:#aaa}
+.grid{display:inline-grid;gap:2px}
+.cell{display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:10px;font-weight:500;cursor:pointer;user-select:none;transition:all 0.1s}
+.cell.slot{width:52px;height:22px;background:#f5f4f1;border:1px solid #e5e5e0;color:#aaa}
 .cell.slot:hover{border-color:#999;background:#eee}
 .cell.slot.on{background:#16a37f;border-color:#128f6e;color:#fff}
-.cell.time-lbl{width:54px;height:30px;font-size:11px;color:#999;justify-content:flex-end;padding-right:8px;cursor:default;background:transparent;border:none}
-.cell.day-lbl{width:46px;height:28px;font-size:10px;color:#888;flex-direction:column;gap:1px;cursor:default;background:transparent;border:none;font-weight:600}
+.cell.time-lbl{width:58px;height:22px;font-size:10px;color:#999;justify-content:flex-end;padding-right:8px;cursor:default;background:transparent;border:none}
+.cell.day-lbl{width:52px;height:28px;font-size:10px;color:#888;flex-direction:column;gap:1px;cursor:default;background:transparent;border:none;font-weight:600}
 .cell.day-lbl span{font-weight:400;color:#bbb;font-size:9px}
-.cell.corner{width:54px;height:28px;background:transparent;border:none;cursor:default}
+.cell.corner{width:58px;height:28px;background:transparent;border:none;cursor:default}
+.cell.half-marker{background:#f9f9f7;border-color:#ece9e0}
 .submit-btn{width:100%;padding:11px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;transition:opacity 0.15s;margin-top:0.5rem}
 .submit-btn:hover{opacity:0.85}
-.submit-btn:active{opacity:0.7}
 .submit-btn:disabled{opacity:0.4;cursor:not-allowed}
 .toast{display:none;margin-top:1rem;padding:11px 16px;background:#e8f7f2;border:1px solid #b2dfd1;border-radius:8px;color:#0f6e56;font-size:13px}
 .toast.error{background:#fef2f2;border-color:#fecaca;color:#991b1b}
@@ -62,11 +63,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pill{padding:4px 10px;border-radius:20px;font-size:12px;background:#f0efe9;border:1px solid #e5e5e0;color:#555}
 .resp-count{font-size:13px;color:#666;margin-right:4px}
 .best-section h2,.heat-section h2{font-size:14px;font-weight:600;margin-bottom:12px;color:#1a1a1a}
-.best-slot{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid #e5e5e0;border-radius:8px;margin-bottom:6px;background:#fff}
-.best-slot-label{font-size:13px;min-width:190px;color:#1a1a1a}
+.best-slot{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid #e5e5e0;border-radius:8px;margin-bottom:6px;background:#fff;flex-wrap:wrap}
+.best-slot-label{font-size:13px;min-width:200px;color:#1a1a1a}
 .bar-wrap{flex:1;height:7px;background:#f0efe9;border-radius:4px;overflow:hidden;min-width:60px}
 .bar-fill{height:100%;background:#16a37f;border-radius:4px}
 .bar-score{font-size:12px;color:#888;min-width:36px;text-align:right}
+.confirm-btn{padding:5px 10px;border:1px solid #16a37f;border-radius:6px;font-size:11px;cursor:pointer;background:#fff;color:#16a37f;font-family:inherit;white-space:nowrap;transition:all 0.15s}
+.confirm-btn:hover{background:#16a37f;color:#fff}
 .heat-section{margin-top:1.5rem}
 .heat-month-title{font-size:12px;font-weight:600;color:#888;margin:1.25rem 0 10px;text-transform:uppercase;letter-spacing:0.06em}
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.25rem}
@@ -87,6 +90,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .update-dates-btn{margin-top:10px;padding:7px 14px;border:1px solid #e0e0db;border-radius:6px;font-size:13px;cursor:pointer;background:#fff;color:#1a1a1a;font-family:inherit}
 .update-dates-btn:hover{background:#f5f4f1}
 .no-responses{font-size:13px;color:#aaa;padding:1rem 0}
+.time-range-note{font-size:12px;color:#888;margin-bottom:10px;padding:6px 10px;background:#f5f4f1;border-radius:6px;display:inline-block}
 </style>
 </head>
 <body>
@@ -103,8 +107,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div id="founder" class="page active">
     <div class="page-header">
       <h1>Share your availability</h1>
-      <p>Select every slot that works for you in October, November, and December. The Founder Council meets once per month for one hour, Monday–Friday between 8am and 6pm.</p>
+      <p>Select every slot that works for you in October, November, and December. The Founder Council meets once per month for one hour.</p>
     </div>
+    <div class="tz-badge">🕐 All times are Pacific Time (PT)</div>
     <div class="card">
       <div class="field-row">
         <div class="field-section">
@@ -113,7 +118,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div class="field-section">
           <label>Your team</label>
-          <select id="founder-team">
+          <select id="founder-team" onchange="onTeamChange()">
             <option value="">Select your team...</option>
             <option>AY Sensors</option>
             <option>Cement Dioxide</option>
@@ -127,7 +132,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           </select>
         </div>
       </div>
-      <div id="grids-container"></div>
+      <div id="grids-container"><p style="font-size:13px;color:#aaa;padding:1rem 0">Select your team above to see availability slots.</p></div>
       <button class="submit-btn" id="submit-btn" onclick="submitAvailability()">Save my availability →</button>
       <div class="toast" id="toast"></div>
     </div>
@@ -160,130 +165,178 @@ const ORG_PASSWORD = 'L2M2026';
 
 const TEAMS = ['AY Sensors','Cement Dioxide','Intellicycle','Local Connect','OncoNext Therapy','RoadAlly','ScaleUp','Xpsilon','Zalvatech'];
 
+// Team-specific hour ranges [startHour, endHour] in 24h, null = default 8-18
+const TEAM_HOURS = {
+  'OncoNext Therapy': [15, 17],
+  'ScaleUp': [16, 18],
+};
+const DEFAULT_HOUR_RANGE = [8, 18];
+
 const DEFAULT_MONTHS = [
-  {label:'October 2026',key:'oct',dates:[{d:'Oct 5',day:'Mon'},{d:'Oct 6',day:'Tue'},{d:'Oct 7',day:'Wed'},{d:'Oct 8',day:'Thu'},{d:'Oct 9',day:'Fri'}]},
-  {label:'November 2026',key:'nov',dates:[{d:'Nov 2',day:'Mon'},{d:'Nov 3',day:'Tue'},{d:'Nov 4',day:'Wed'},{d:'Nov 5',day:'Thu'},{d:'Nov 6',day:'Fri'}]},
-  {label:'December 2026',key:'dec',dates:[{d:'Dec 7',day:'Mon'},{d:'Dec 8',day:'Tue'},{d:'Dec 9',day:'Wed'},{d:'Dec 10',day:'Thu'},{d:'Dec 11',day:'Fri'}]}
+  {label:'October 2026', key:'oct', dates:[{d:'Oct 5',day:'Mon'},{d:'Oct 6',day:'Tue'},{d:'Oct 7',day:'Wed'},{d:'Oct 8',day:'Thu'},{d:'Oct 9',day:'Fri'}]},
+  {label:'November 2026', key:'nov', dates:[{d:'Nov 9',day:'Mon'},{d:'Nov 10',day:'Tue'},{d:'Nov 12',day:'Thu'},{d:'Nov 13',day:'Fri'}]},
+  {label:'December 2026', key:'dec', dates:[{d:'Dec 4',day:'Fri'},{d:'Dec 7',day:'Mon'},{d:'Dec 8',day:'Tue'},{d:'Dec 9',day:'Wed'},{d:'Dec 10',day:'Thu'},{d:'Dec 11',day:'Fri'}]}
 ];
 
-const HOURS = [];
-for(let h=8;h<18;h++) HOURS.push({label:h===12?'12pm':h<12?h+'am':(h-12)+'pm',val:h});
+// Zalvatech gets same months but dec has Dec 4 extra (already in DEFAULT_MONTHS for all)
+// Nov has no Nov 11 (already removed above)
 
-let MONTHS = JSON.parse(localStorage.getItem('fc_months')||'null') || DEFAULT_MONTHS;
+let MONTHS = JSON.parse(localStorage.getItem('fc_months_v2')||'null') || DEFAULT_MONTHS;
 let selected = {};
 let orgUnlocked = false;
 let activeTeam = TEAMS[0];
 
-function slotKey(mkey,di,hi){ return `${mkey}_${di}_${hi}`; }
+function getHoursForTeam(team){
+  const range = TEAM_HOURS[team] || DEFAULT_HOUR_RANGE;
+  const slots = [];
+  for(let h=range[0]; h<range[1]; h++){
+    slots.push({label: formatHour(h,0), val:h, half:false});
+    slots.push({label: formatHour(h,30), val:h, half:true});
+  }
+  return slots;
+}
 
-function buildFounderGrids(){
+function formatHour(h, min){
+  const suffix = h < 12 ? 'am' : 'pm';
+  const displayH = h === 0 ? 12 : h > 12 ? h-12 : h;
+  return min === 0 ? `${displayH}${suffix}` : `${displayH}:30${suffix}`;
+}
+
+function slotKey(mkey, di, hi){ return `${mkey}_${di}_${hi}`; }
+
+function onTeamChange(){
+  selected = {};
+  const team = document.getElementById('founder-team').value;
+  if(!team) return;
+  buildFounderGrids(team);
+}
+
+function getMonthsForTeam(team){
+  return MONTHS;
+}
+
+function buildFounderGrids(team){
   const c = document.getElementById('grids-container');
-  c.innerHTML='';
-  MONTHS.forEach(m=>{
+  c.innerHTML = '';
+  const hours = getHoursForTeam(team);
+  const months = getMonthsForTeam(team);
+  const range = TEAM_HOURS[team] || DEFAULT_HOUR_RANGE;
+
+  if(TEAM_HOURS[team]){
+    const note = document.createElement('div');
+    note.className = 'time-range-note';
+    note.textContent = `⏰ Your team's available window: ${formatHour(range[0],0)} – ${formatHour(range[1],0)} PT`;
+    c.appendChild(note);
+  }
+
+  months.forEach(m=>{
     const block = document.createElement('div');
-    block.className='month-block';
-    block.innerHTML=`<div class="month-title">${m.label}</div>`;
+    block.className = 'month-block';
+    block.innerHTML = `<div class="month-title">${m.label}</div>`;
     const scroll = document.createElement('div');
-    scroll.className='grid-scroll';
+    scroll.className = 'grid-scroll';
     const grid = document.createElement('div');
-    grid.className='grid';
-    grid.style.gridTemplateColumns=`54px repeat(${m.dates.length},46px)`;
-    const corner=document.createElement('div');
-    corner.className='cell corner';
+    grid.className = 'grid';
+    grid.style.gridTemplateColumns = `58px repeat(${m.dates.length},52px)`;
+
+    const corner = document.createElement('div');
+    corner.className = 'cell corner';
     grid.appendChild(corner);
     m.dates.forEach(date=>{
-      const lbl=document.createElement('div');
-      lbl.className='cell day-lbl';
-      lbl.innerHTML=`${date.day}<span>${date.d}</span>`;
+      const lbl = document.createElement('div');
+      lbl.className = 'cell day-lbl';
+      lbl.innerHTML = `${date.day}<span>${date.d}</span>`;
       grid.appendChild(lbl);
     });
-    HOURS.forEach((hr,hi)=>{
-      const tl=document.createElement('div');
-      tl.className='cell time-lbl';
-      tl.textContent=hr.label;
+
+    hours.forEach((hr,hi)=>{
+      const tl = document.createElement('div');
+      tl.className = 'cell time-lbl';
+      tl.textContent = hr.label;
       grid.appendChild(tl);
       m.dates.forEach((date,di)=>{
-        const sk=slotKey(m.key,di,hi);
-        const cell=document.createElement('div');
-        cell.className='cell slot'+(selected[sk]?' on':'');
-        cell.dataset.key=sk;
-        cell.addEventListener('mousedown',e=>{e.preventDefault();toggleCell(sk,cell);});
-        cell.addEventListener('mouseenter',e=>{if(e.buttons===1)toggleCell(sk,cell);});
+        const sk = slotKey(m.key, di, hi);
+        const cell = document.createElement('div');
+        cell.className = 'cell slot' + (hr.half?' half-marker':'') + (selected[sk]?' on':'');
+        cell.dataset.key = sk;
+        cell.addEventListener('mousedown', e=>{e.preventDefault(); toggleCell(sk,cell);});
+        cell.addEventListener('mouseenter', e=>{if(e.buttons===1) toggleCell(sk,cell);});
         grid.appendChild(cell);
       });
     });
+
     scroll.appendChild(grid);
     block.appendChild(scroll);
     c.appendChild(block);
   });
 }
 
-function toggleCell(key,cell){
-  selected[key]=!selected[key];
-  cell.classList.toggle('on',!!selected[key]);
+function toggleCell(key, cell){
+  selected[key] = !selected[key];
+  cell.classList.toggle('on', !!selected[key]);
 }
 
 async function submitAvailability(){
-  const name=document.getElementById('founder-name').value.trim();
-  const team=document.getElementById('founder-team').value;
-  if(!name){document.getElementById('founder-name').focus();showToast('Please enter your name.','error');return;}
-  if(!team){document.getElementById('founder-team').focus();showToast('Please select your team.','error');return;}
-  const slots=Object.keys(selected).filter(k=>selected[k]);
-  if(!slots.length){showToast('Please select at least one available slot.','error');return;}
+  const name = document.getElementById('founder-name').value.trim();
+  const team = document.getElementById('founder-team').value;
+  if(!name){document.getElementById('founder-name').focus(); showToast('Please enter your name.','error'); return;}
+  if(!team){document.getElementById('founder-team').focus(); showToast('Please select your team.','error'); return;}
+  const slots = Object.keys(selected).filter(k=>selected[k]);
+  if(!slots.length){showToast('Please select at least one available slot.','error'); return;}
 
-  const btn=document.getElementById('submit-btn');
-  btn.disabled=true;btn.textContent='Saving...';
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
 
   try{
-    const checkRes=await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}&team=eq.${encodeURIComponent(team)}&select=id`,{
+    const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}&team=eq.${encodeURIComponent(team)}&select=id`,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
     });
-    const existing=await checkRes.json();
-    if(existing&&existing.length>0){
+    const existing = await checkRes.json();
+    if(existing && existing.length > 0){
       await fetch(`${SUPABASE_URL}/rest/v1/responses?founder_name=eq.${encodeURIComponent(name)}&team=eq.${encodeURIComponent(team)}`,{
         method:'PATCH',
         headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-        body:JSON.stringify({slots:JSON.stringify(slots)})
+        body: JSON.stringify({slots: JSON.stringify(slots)})
       });
     } else {
       await fetch(`${SUPABASE_URL}/rest/v1/responses`,{
         method:'POST',
         headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
-        body:JSON.stringify({founder_name:name,team:team,slots:JSON.stringify(slots)})
+        body: JSON.stringify({founder_name:name, team:team, slots:JSON.stringify(slots)})
       });
     }
     showToast('✓ Saved! You can update your availability anytime by re-submitting.','success');
   } catch(e){
     showToast('Something went wrong. Please try again.','error');
   }
-  btn.disabled=false;btn.textContent='Save my availability →';
+  btn.disabled = false; btn.textContent = 'Save my availability →';
 }
 
-function showToast(msg,type){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast'+(type==='error'?' error':'');
-  t.style.display='block';
-  setTimeout(()=>t.style.display='none',4000);
+function showToast(msg, type){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type==='error'?' error':'');
+  t.style.display = 'block';
+  setTimeout(()=>t.style.display='none', 4000);
 }
 
 function checkPassword(){
-  const input=document.getElementById('password-input').value;
-  if(input===ORG_PASSWORD){
-    orgUnlocked=true;
-    document.getElementById('password-overlay').style.display='none';
-    document.getElementById('org-inner').style.display='block';
+  const input = document.getElementById('password-input').value;
+  if(input === ORG_PASSWORD){
+    orgUnlocked = true;
+    document.getElementById('password-overlay').style.display = 'none';
+    document.getElementById('org-inner').style.display = 'block';
     buildOrgView();
   } else {
-    document.getElementById('password-error').style.display='block';
-    document.getElementById('password-input').value='';
+    document.getElementById('password-error').style.display = 'block';
+    document.getElementById('password-input').value = '';
     document.getElementById('password-input').focus();
   }
 }
 
-function heatStyle(count,max){
+function heatStyle(count, max){
   if(!count) return {bg:'#f5f4f1',border:'#e5e5e0',color:'#ccc'};
-  const r=count/max;
+  const r = count/max;
   if(r<=0.25) return {bg:'#d1f0e6',border:'#a3ddd0',color:'#0f6e56'};
   if(r<=0.5)  return {bg:'#5dcaa5',border:'#1d9e75',color:'#fff'};
   if(r<=0.75) return {bg:'#16a37f',border:'#0f8468',color:'#fff'};
@@ -291,102 +344,103 @@ function heatStyle(count,max){
 }
 
 async function buildOrgView(){
-  const c=document.getElementById('org-content');
-  c.innerHTML='<div class="loading">Loading responses...</div>';
+  const c = document.getElementById('org-content');
+  c.innerHTML = '<div class="loading">Loading responses...</div>';
 
-  let rows=[];
+  let rows = [];
   try{
-    const res=await fetch(`${SUPABASE_URL}/rest/v1/responses?select=founder_name,team,slots`,{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/responses?select=founder_name,team,slots`,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
     });
-    rows=await res.json();
+    rows = await res.json();
   } catch(e){
-    c.innerHTML='<div class="card"><div class="empty-state"><p>Could not load responses. Check your connection and try again.</p></div></div>';
+    c.innerHTML = '<div class="card"><div class="empty-state"><p>Could not load responses. Check your connection and try again.</p></div></div>';
     return;
   }
 
-  const teamData={};
+  const teamData = {};
   TEAMS.forEach(t=>teamData[t]={});
   rows.forEach(r=>{
-    if(r.team&&teamData[r.team]!==undefined){
-      try{teamData[r.team][r.founder_name]=JSON.parse(r.slots||'[]');}catch(e){teamData[r.team][r.founder_name]=[];}
+    if(r.team && teamData[r.team]!==undefined){
+      try{teamData[r.team][r.founder_name] = JSON.parse(r.slots||'[]');} catch(e){teamData[r.team][r.founder_name]=[];}
     }
   });
 
-  let html=`<div class="card cohort-section">
+  let html = `<div class="card cohort-section">
     <h2>Cohort settings</h2>
     <p style="font-size:13px;color:#666;margin-bottom:12px">Update the target week for each month. Enter the Monday date (e.g. "Oct 5") and days will auto-fill Mon–Fri.</p>
     <div class="date-grid">`;
   MONTHS.forEach(m=>{
-    html+=`<div class="date-field"><label>${m.label}</label><input type="text" id="week-${m.key}" placeholder="e.g. Oct 5" value="${m.dates[0].d}" /></div>`;
+    html += `<div class="date-field"><label>${m.label}</label><input type="text" id="week-${m.key}" placeholder="e.g. Oct 5" value="${m.dates.find(d=>d.day==='Mon')?.d||m.dates[0].d}" /></div>`;
   });
-  html+=`</div><button class="update-dates-btn" onclick="updateDates()">Update dates & rebuild form →</button></div>`;
-
-  html+=`<button class="reset-btn" onclick="resetResponses()">Clear all responses</button>`;
-
-  html+=`<div class="team-tabs">`;
+  html += `</div><button class="update-dates-btn" onclick="updateDates()">Update dates & rebuild form →</button></div>`;
+  html += `<button class="reset-btn" onclick="resetResponses()">Clear all responses</button>`;
+  html += `<div class="team-tabs">`;
   TEAMS.forEach(t=>{
-    const count=Object.keys(teamData[t]).length;
-    html+=`<button class="team-tab${t===activeTeam?' active':''}" onclick="switchTeam('${t}',this)">${t}${count>0?` <span style="opacity:0.6">(${count})</span>`:''}</button>`;
+    const count = Object.keys(teamData[t]).length;
+    html += `<button class="team-tab${t===activeTeam?' active':''}" onclick="switchTeam('${t}',this)">${t}${count>0?` <span style="opacity:0.6">(${count})</span>`:''}</button>`;
   });
-  html+=`</div><div id="team-view"></div>`;
+  html += `</div><div id="team-view"></div>`;
 
-  c.innerHTML=html;
-  renderTeamView(teamData[activeTeam],activeTeam);
-  window._teamData=teamData;
+  c.innerHTML = html;
+  renderTeamView(teamData[activeTeam], activeTeam);
+  window._teamData = teamData;
 }
 
-function switchTeam(team,btn){
-  activeTeam=team;
+function switchTeam(team, btn){
+  activeTeam = team;
   document.querySelectorAll('.team-tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  renderTeamView(window._teamData[team],team);
+  renderTeamView(window._teamData[team], team);
 }
 
-function renderTeamView(responses,teamName){
-  const tv=document.getElementById('team-view');
-  const names=Object.keys(responses);
-  const total=names.length;
+function renderTeamView(responses, teamName){
+  const tv = document.getElementById('team-view');
+  const names = Object.keys(responses);
+  const total = names.length;
+  const hours = getHoursForTeam(teamName);
 
   if(!total){
-    tv.innerHTML=`<div class="card"><div class="empty-state"><div class="icon">📭</div><p>No responses from ${teamName} yet.</p></div></div>`;
+    tv.innerHTML = `<div class="card"><div class="empty-state"><div class="icon">📭</div><p>No responses from ${teamName} yet.</p></div></div>`;
     return;
   }
 
-  const counts={};
+  const counts = {};
   names.forEach(n=>(responses[n]||[]).forEach(sk=>{counts[sk]=(counts[sk]||0)+1;}));
-  const globalMax=Math.max(...Object.values(counts),1);
+  const globalMax = Math.max(...Object.values(counts),1);
 
-  let html=`<div class="pills"><span class="resp-count">${total} response${total!==1?'s':''} from ${teamName}</span>`;
-  names.forEach(n=>{html+=`<span class="pill">👤 ${n}</span>`;});
-  html+=`</div>`;
+  let html = `<div class="pills"><span class="resp-count">${total} response${total!==1?'s':''} from ${teamName}</span>`;
+  names.forEach(n=>{html += `<span class="pill">👤 ${n}</span>`;});
+  html += `</div>`;
 
-  const ranked=[];
-  MONTHS.forEach(m=>{
-    HOURS.forEach((hr,hi)=>{
+  const ranked = [];
+  MONTHS.forEach((m,mIdx)=>{
+    hours.forEach((hr,hi)=>{
       m.dates.forEach((date,di)=>{
-        const sk=slotKey(m.key,di,hi);
-        const cnt=counts[sk]||0;
-        if(cnt>0) ranked.push({sk,cnt,label:`${date.d} (${date.day}) ${hr.label}`,month:m.label});
+        const sk = slotKey(m.key, di, hi);
+        const cnt = counts[sk]||0;
+        if(cnt>0) ranked.push({sk, cnt, label:`${date.d} (${date.day}) ${hr.label} PT`, month:m.label, mIndex:mIdx+1});
       });
     });
   });
   ranked.sort((a,b)=>b.cnt-a.cnt);
 
-  html+=`<div class="card best-section"><h2>Best slots by overlap</h2>`;
-  const top=ranked.slice(0,8);
-  if(!top.length){html+=`<p class="no-responses">No overlapping slots yet.</p>`;}
+  html += `<div class="card best-section"><h2>Best slots by overlap</h2>`;
+  const top = ranked.slice(0,8);
+  if(!top.length){html += `<p class="no-responses">No overlapping slots yet.</p>`;}
   top.forEach(s=>{
-    const pct=Math.round((s.cnt/total)*100);
-    html+=`<div class="best-slot">
+    const pct = Math.round((s.cnt/total)*100);
+    const safeLabel = encodeURIComponent(JSON.stringify({sk:s.sk,label:s.label,month:s.month,mIndex:s.mIndex,team:teamName}));
+    html += `<div class="best-slot">
       <div class="best-slot-label">${s.label} <span style="font-size:11px;color:#aaa">— ${s.month}</span></div>
       <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
       <div class="bar-score">${s.cnt}/${total}</div>
+      <button class="confirm-btn" onclick="confirmSlot('${safeLabel}')">Download .ics</button>
     </div>`;
   });
-  html+=`</div>`;
+  html += `</div>`;
 
-  html+=`<div class="card heat-section"><h2>Availability heatmaps</h2>
+  html += `<div class="card heat-section"><h2>Availability heatmaps <span style="font-size:11px;font-weight:400;color:#aaa">(Pacific Time)</span></h2>
   <div class="legend">
     <div class="legend-item"><div class="legend-swatch" style="background:#d1f0e6;border-color:#a3ddd0"></div> 1 person</div>
     <div class="legend-item"><div class="legend-swatch" style="background:#5dcaa5;border-color:#1d9e75"></div> Some</div>
@@ -395,41 +449,102 @@ function renderTeamView(responses,teamName){
   </div>`;
 
   MONTHS.forEach(m=>{
-    html+=`<div class="heat-month-title">${m.label}</div><div class="grid-scroll"><div class="grid" style="display:inline-grid;gap:3px;grid-template-columns:54px repeat(${m.dates.length},46px)">`;
-    html+=`<div style="width:54px;height:28px"></div>`;
+    html += `<div class="heat-month-title">${m.label}</div><div class="grid-scroll"><div class="grid" style="display:inline-grid;gap:2px;grid-template-columns:58px repeat(${m.dates.length},52px)">`;
+    html += `<div style="width:58px;height:28px"></div>`;
     m.dates.forEach(date=>{
-      html+=`<div style="width:46px;height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#888;gap:1px">${date.day}<span style="font-weight:400;color:#bbb;font-size:9px">${date.d}</span></div>`;
+      html += `<div style="width:52px;height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#888;gap:1px">${date.day}<span style="font-weight:400;color:#bbb;font-size:9px">${date.d}</span></div>`;
     });
-    HOURS.forEach((hr,hi)=>{
-      html+=`<div style="width:54px;height:30px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;color:#999">${hr.label}</div>`;
+    hours.forEach((hr,hi)=>{
+      html += `<div style="width:58px;height:22px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:10px;color:#999">${hr.label}</div>`;
       m.dates.forEach((date,di)=>{
-        const sk=slotKey(m.key,di,hi);
-        const cnt=counts[sk]||0;
-        const st=heatStyle(cnt,globalMax);
-        html+=`<div style="width:46px;height:30px;border-radius:5px;border:1px solid ${st.border};background:${st.bg};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:${st.color}">${cnt||''}</div>`;
+        const sk = slotKey(m.key, di, hi);
+        const cnt = counts[sk]||0;
+        const st = heatStyle(cnt, globalMax);
+        html += `<div style="width:52px;height:22px;border-radius:4px;border:1px solid ${st.border};background:${st.bg};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:${st.color}">${cnt||''}</div>`;
       });
     });
-    html+=`</div></div><br>`;
+    html += `</div></div><br>`;
   });
-  html+=`</div>`;
-  tv.innerHTML=html;
+  html += `</div>`;
+  tv.innerHTML = html;
+}
+
+function confirmSlot(encoded){
+  const data = JSON.parse(decodeURIComponent(encoded));
+  generateICS(data);
+}
+
+function generateICS(data){
+  const {label, month, mIndex, team} = data;
+  const parts = label.match(/^(\w+ \d+) \(\w+\) (\d+(?::\d+)?(?:am|pm)) PT$/);
+  if(!parts){alert('Could not parse slot details.'); return;}
+  const dateStr = parts[1];
+  const timeStr = parts[2];
+
+  const yearMatch = month.match(/(\d{4})/);
+  const year = yearMatch ? yearMatch[1] : '2026';
+  const monthMap = {Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
+  const [mon, day] = dateStr.split(' ');
+  const mm = monthMap[mon]||'10';
+  const dd = String(day).padStart(2,'0');
+
+  const timeMatch = timeStr.match(/(\d+)(?::(\d+))?(am|pm)/);
+  let hour = parseInt(timeMatch[1]);
+  const mins = timeMatch[2]||'00';
+  if(timeMatch[3]==='pm' && hour!==12) hour+=12;
+  if(timeMatch[3]==='am' && hour===12) hour=0;
+  const hh = String(hour).padStart(2,'0');
+  const endMins = parseInt(mins)+30;
+  const endHH = endMins>=60 ? String(hour+1).padStart(2,'0') : hh;
+  const endMM = endMins>=60 ? String(endMins-60).padStart(2,'0') : String(endMins).padStart(2,'0');
+
+  const dtStart = `${year}${mm}${dd}T${hh}${mins}00`;
+  const dtEnd = `${year}${mm}${dd}T${endHH}${endMM}00`;
+  const now = new Date().toISOString().replace(/[-:.]/g,'').slice(0,15)+'Z';
+  const title = `Founder Council Meeting ${mIndex} — ${team}`;
+
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Lab2Market//Founder Council//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:REQUEST',
+    'BEGIN:VEVENT',
+    `DTSTART;TZID=America/Vancouver:${dtStart}`,
+    `DTEND;TZID=America/Vancouver:${dtEnd}`,
+    `DTSTAMP:${now}`,
+    `SUMMARY:${title}`,
+    'DESCRIPTION:Lab2Market Launch — Founder Council Meeting. Hosted by SFU VentureLabs.',
+    'LOCATION:TBD',
+    'STATUS:CONFIRMED',
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+
+  const blob = new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Founder-Council-Meeting-${mIndex}-${team.replace(/\s+/g,'-')}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function updateDates(){
-  const DAYS=['Mon','Tue','Wed','Thu','Fri'];
-  const newMonths=MONTHS.map(m=>{
-    const raw=document.getElementById(`week-${m.key}`).value.trim();
+  const DAYS = ['Mon','Tue','Wed','Thu','Fri'];
+  const newMonths = MONTHS.map(m=>{
+    const raw = document.getElementById(`week-${m.key}`).value.trim();
     if(!raw) return m;
-    const parts=raw.split(' ');
-    const mon=parts[0];
-    const startDay=parseInt(parts[1]);
+    const parts = raw.split(' ');
+    const mon = parts[0];
+    const startDay = parseInt(parts[1]);
     if(isNaN(startDay)) return m;
-    return {...m,dates:DAYS.map((day,i)=>({day,d:`${mon} ${startDay+i}`}))};
+    return {...m, dates: DAYS.map((day,i)=>({day, d:`${mon} ${startDay+i}`}))};
   });
-  MONTHS=newMonths;
-  localStorage.setItem('fc_months',JSON.stringify(MONTHS));
-  selected={};
-  buildFounderGrids();
+  MONTHS = newMonths;
+  localStorage.setItem('fc_months_v2', JSON.stringify(MONTHS));
   alert('Dates updated! The availability form has been rebuilt with the new weeks.');
 }
 
@@ -446,15 +561,13 @@ async function resetResponses(){
   }
 }
 
-function showPage(id,btn){
+function showPage(id, btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
-  if(id==='organizer'&&orgUnlocked) buildOrgView();
+  if(id==='organizer' && orgUnlocked) buildOrgView();
 }
-
-buildFounderGrids();
 </script>
 </body>
 </html>
